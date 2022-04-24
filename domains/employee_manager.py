@@ -31,7 +31,7 @@ class Employee_Manager:
         return self.roles[role]          # Convert from key (12345) to its value
 
     def choose_shift(self):
-        shift = input('''  Choose shift:
+        shift = input('''. Choose shift:
                         \r      1. Morning    2. Afternoon    3. Evening
                         \r  Choice (123): ''')
         while shift not in self.shifts.keys():
@@ -70,19 +70,23 @@ class Employee_Manager:
             id = input('(!) There is no employee with this ID\nEnter again ID: ')
         for employee in self.__employees:
             if employee.get_id() == id:
-                return employee
+                print(employee)
 
     def list_employees(self):
-        print(self.__employees)
+        # print(self.__employees)
+        for employee in self.__employees:
+            print(employee)
 
     def list_by_shift(self):
         shift = self.choose_shift()
+        print()
         for employee in self.__employees:
             if employee.get_shift() == shift:
                 print(employee)
 
     def list_by_role(self):
         role = self.choose_role()
+        print()
         for employee in self.__employees:
             if employee.get_role() == role:
                 print(employee)
