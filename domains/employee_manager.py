@@ -1,4 +1,4 @@
-from input import input_num
+from input import *
 from domains.Employee import Employee
 
 class Employee_Manager:
