@@ -10,11 +10,11 @@ if __name__ == '__main__':
         if password == 'admin':
             # Administrator section: food menu, employees, and bills
             while True:
-                print('''\n----- Admin section -----\n
+                print('''\n--------- Administrator ---------\n
                         \r  1. Dishes
                         \r  2. Employees
                         \r  3. Bills
-                        \r  0. Exit''')
+                        \r  0. Quit''')
                 choice = input('\nChoice (1230): ')
                 if choice == '0':
                     break
@@ -24,6 +24,8 @@ if __name__ == '__main__':
                     e_manager.start()
                 elif choice == '3':
                     n = 3
+                else:
+                    print('(!) Bad choice')
 
         elif password == 'staff':
             # Staff section: ordering and billing

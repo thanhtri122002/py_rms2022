@@ -1,10 +1,11 @@
-def input_num(str):     # Input a quantity of something
+def input_name():
     while True:
         try:
-            num = int(input(f'\nEnter number of {str}: '))
-            while num < 1:
-                print('(!) Invalid input')
-                num = int(input(f'\nEnter number of {str}: '))
-            return num
+            fst, lst = input('. Enter name (first, last): ').strip().split(',')
         except ValueError:
             print('(!) Invalid input')
+            continue
+        if fst.strip() == '' or lst.strip() == '':
+            print('(!) Invalid name')
+            continue
+        return fst.strip(), lst.strip()

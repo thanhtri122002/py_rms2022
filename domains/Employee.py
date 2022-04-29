@@ -8,6 +8,12 @@ class Employee:
         self.__salary = salary
         self.__shift = shift
 
+    def __str__(self):
+        return f'{self.get_name():25} {self.get_id():15} {self.get_address():10} {self.get_role():15} {self.get_salary():10}\t{self.get_shift()}'
+
+    def __repr__(self):
+        return f'Employee({self.get_name()}, {self.get_id()}, {self.get_address()}, {self.get_role()}, {self.get_salary()}, {self.get_shift()})'
+
     def set_name(self, first, last):
         self.__first = first
         self.__last = last
@@ -50,9 +56,3 @@ class Employee:
 
     def get_shift(self):
         return self.__shift
-
-    def __str__(self):
-        return f'{self.get_name():}ID: {self.get_id():}Address: {self.get_address():}Role: {self.get_role():}Salary: {self.get_salary():}Shift: {self.get_shift()}'
-
-    def __repr__(self):
-        return f'Employee({self.get_name()}, {self.get_id()}, {self.get_address()}, {self.get_role()}, {self.get_salary()}, {self.get_shift()})'
