@@ -3,10 +3,6 @@ from tkinter import *
 def click():
     entered_text = textbox.get().lower() # this will collect the text from the text entry box
     output.delete(0.0, END)
-    # try:
-    #     definition = menu[entered_text]
-    # except:
-    #     definition = 'Cannot find that word in the list lma0'
     result = []
 
     count = 0
@@ -24,9 +20,10 @@ def click():
 # main
 window = Tk()
 window.title('Restautant Management Application')
-window.configure(background='white')
-# window.geometry('400x500')
+window.config(background='#ffffff')
+window.geometry('420x420')
 window.resizable(FALSE, FALSE)
+
 # label
 Label(window, text='Thầy Sơn ăn gì', font='none 12').grid(row=0, column=0, sticky=W)
 
