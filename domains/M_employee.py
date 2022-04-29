@@ -25,37 +25,66 @@ class Employee_Manager:
         role = input('''. Choose role:
                         \r      1. Manager    2. Chef    3. Waiter
                         \r      4. Receptionist   5. Security Guard
-                        \r  Choice (12345): ''')
+                        \r  Choice (12345): ''').strip()
         while role not in self.roles.keys():
-            role = input('(!) Invalid choice\n  Try again (12345): ')
+            role = input('(!) Invalid choice\n  Try again (12345): ').strip()
         return self.roles[role]          # Convert from key (12345) to its value
 
     def choose_shift(self):
         shift = input('''. Choose shift:
                         \r      1. Morning    2. Afternoon    3. Evening
-                        \r  Choice (123): ''')
+                        \r  Choice (123): ''').strip()
         while shift not in self.shifts.keys():
-            shift = input('(!) Invalid choice\n  Try again (123): ')
+            shift = input('(!) Invalid choice\n  Try again (123): ').strip()
         return self.shifts[shift]       # Convert from key (123) to its value
 
     def add_employee(self):
-        n = input_num('employees')
-        for i in range(n):
-            print(f'\n----- Employee {i + 1} of {n} -----\n')
+        fst = input('. Enter first name: ')
+        lst = input('. Enter last name: ')
+        id = input('. Enter ID: ')
+        while id in self.ids:
+            id = input('(!) This ID is already taken\n Try again: ')
+        self.ids.append(id)
+        adr = input('. Enter address: ')
+        r = self.choose_role()
+        salary = self.salaries[r]   # Get the salary of the role
+        shift = self.choose_shift()
+        self.__employees.append(Employee(fst, lst, id, adr, r, salary, shift))
+        self.num_employees += 1
+
+    def edit_employee(self, employee):
+        print(f'Editing employee {employee.get_name()}')
+        print('''
+                \r  1. Name
+                \r  2. ID
+                \r  3. Address
+                \r  4. Role
+                \r  5. Shift
+                \r  0. Exit''')
+        choice = input('\nChoice (123450): ')
+        if choice == '0':
+            return
+        elif choice == '1':
             fst = input('. Enter first name: ')
             lst = input('. Enter last name: ')
-
+            employee.set_name(fst, lst)
+        elif choice == '2':
+            self.ids.remove(employee.get_id())
             id = input('. Enter ID: ')
             while id in self.ids:
-                id = input('(!) This ID is already taken\nEnter ID: ')
+                id = input('(!) This ID is already taken\n Try again: ')
             self.ids.append(id)
-
+            employee.set_id(id)
+        elif choice == '3':
             adr = input('. Enter address: ')
+            employee.set_address(adr)
+        elif choice == '4':
             r = self.choose_role()
-            salary = self.salaries[r]   # Get the salary of the role
+            employee.set_role(r)
+            employee.set_salary(self.salaries[r])
+        elif choice == '5':
             shift = self.choose_shift()
-            self.__employees.append(Employee(fst, lst, id, adr, r, salary, shift))
-            self.num_employees += 1
+            employee.set_shift(shift)
 
     def delete_employee(self, employee):
         name = employee.get_name()
@@ -64,18 +93,12 @@ class Employee_Manager:
         self.ids.remove(employee.get_id())
         print(f'Employee {name} are removed')
 
-    def find_by_id(self):
-        id = input('Enter ID: ')
-        while id not in self.ids:
-            id = input('(!) There is no employee with this ID\nEnter again ID: ')
-        for employee in self.__employees:
-            if employee.get_id() == id:
-                print(employee)
+#
 
     def list_employees(self):
         # print(self.__employees)
-        for employee in self.__employees:
-            print(employee)
+        for i, employee in enumerate(self.__employees):
+            print(str(i+1) + '.', employee)
 
     def list_by_shift(self):
         shift = self.choose_shift()
@@ -93,14 +116,14 @@ class Employee_Manager:
 
     def start(self):
         while True:
-            start_menu = {  '1': self.add_employee,
-                            '2': self.find_by_id }
-            print('''\n----- Employee Manager ------\n
+            print('\n----- Admin / Employee Manager ------\n')
+            self.list_employees()
+            print('''Choose an option:
                     \r  1. Add employee
                     \r  2. Find employee by ID
                     \r  3. List employees
                     \r  0. Exit''')
-            choice0 = input('\nChoice (123450): ')
+            choice0 = input('Choice (123450): ')
             if choice0 == '0':
                 return
             elif choice0 in start_menu.keys():

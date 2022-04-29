@@ -52,12 +52,7 @@ class Employee:
         return self.__shift
 
     def __str__(self):
-        return f'''{self.get_name()}
-        \r . ID: {self.get_id()}
-        \r . Address: {self.get_address()}
-        \r . Role: {self.get_role()}
-        \r . Salary: {self.get_salary()}
-        \r . Shift: {self.get_shift()}'''
+        return f'{self.get_name():}ID: {self.get_id():}Address: {self.get_address():}Role: {self.get_role():}Salary: {self.get_salary():}Shift: {self.get_shift()}'
 
     def __repr__(self):
         return f'Employee({self.get_name()}, {self.get_id()}, {self.get_address()}, {self.get_role()}, {self.get_salary()}, {self.get_shift()})'
