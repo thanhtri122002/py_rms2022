@@ -4,7 +4,6 @@ from domains.Employee import Employee
 
 class Employee_Manager:
     ids = []    # List of used IDs
-    num_employees = 0
 
     roles = {'1': 'Manager', '2': 'Chef', '3': 'Waiter',
                 '4': 'Receptionist', '5': 'Security Guard'}
@@ -13,10 +12,10 @@ class Employee_Manager:
     shifts = {'1': 'Morning', '2': 'Afternoon', '3': 'Evening'}
 
     def __init__(self):
-        self.__employees = []
+        self.employees = []
 
     def __str__(self):
-        for i in self.__employees:
+        for i in self.employees:
             print(i)
 
     def choose_role(self):
@@ -49,8 +48,7 @@ class Employee_Manager:
         r = self.choose_role()
         salary = self.salaries[r]   # Get the salary of the role
         shift = self.choose_shift()
-        self.__employees.append(Employee(fst, lst, id, adr, r, salary, shift))
-        self.num_employees += 1
+        self.employees.append(Employee(fst, lst, id, adr, r, salary, shift))
 
     def edit_employee(self, employee):
         while True:
@@ -92,41 +90,41 @@ class Employee_Manager:
 
     def delete_employee(self, employee):
         self.ids.remove(employee.get_id())
-        self.__employees.remove(employee)
-        self.num_employees -= 1
+        self.employees.remove(employee)
 
     def select_employee(self, action):
-        if self.num_employees == 0: return 0
+        if len(self.employees) == 0: return 0
         while True:
             os.system('clear')
             print('\n---- Admin / Employee Manager -----\n')
             self.list_employees()
             print('''0. <-- Go back
                     \r-----------------------------------''')
-            choice = input(f'\nSelect an employee to {action} (1-{self.num_employees}, 0): ').strip()
+            choice = input(f'\nSelect an employee to {action} (1-{len(self.employees)}, 0): ').strip()
             if choice == '0':
                 return 0
-            elif choice.isdigit() and int(choice) in range(1, self.num_employees+1):
-                return self.__employees[int(choice)-1]
+            elif choice.isdigit() and int(choice) in range(1, len(self.employees)+1):
+                return self.employees[int(choice)-1]
 
     def list_employees(self):
-        # print(self.__employees)
-        if self.num_employees == 0:
+        # print(self.employees)
+        if len(self.employees) == 0:
             print('(!) No employees')
         else:
             print('   Name\t\t\t     ID\t\t     Address\t     Role\t\t Salary  Shift')
-            for i, employee in enumerate(self.__employees):
+            for i, employee in enumerate(self.employees):
                 print(str(i+1) + '.', employee)
 
     def list_by_shift(self):
         shift = self.choose_shift()
         print()
-        for employee in self.__employees:
+        for employee in self.employees:
             if employee.get_shift() == shift:
                 print(employee)
 
     def start(self):
         while True:
+            write_data('employees', self.employees, self.ids)
             os.system('clear')
             print('\n---- Admin / Employee Manager -----\n')
             self.list_employees()

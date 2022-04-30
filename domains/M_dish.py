@@ -1,5 +1,5 @@
-# from input import *
 import os
+from input import *
 from domains.Dish import Dish
 
 class Dish_Manager:
@@ -7,10 +7,10 @@ class Dish_Manager:
     num_dishes = 0
 
     def __init__(self):
-        self.__dishes = []
+        self.dishes = []
 
     def __str__(self):
-        for i in self.__dishes:
+        for i in self.dishes:
             print(i)
 
     def add_dish(self):
@@ -31,8 +31,7 @@ class Dish_Manager:
             price = input('''(!) Invalid price
                             \rTry again: ''').strip()
         price = int(price)
-        self.__dishes.append(Dish(name, price))
-        self.num_dishes += 1
+        self.dishes.append(Dish(name, price))
 
     def edit_dish(self, dish):
         while True:
@@ -69,34 +68,34 @@ class Dish_Manager:
 
     def delete_dish(self, dish):
         self.names.remove(dish.get_name())
-        self.__dishes.remove(dish)
-        self.num_dishes -= 1
+        self.dishes.remove(dish)
 
     def select_dish(self, action):
-        if self.num_dishes == 0: return 0
+        if len(self.dishes) == 0: return 0
         while True:
             os.system('clear')
             print('\n----- Admin / Dishes Manager ------\n')
             self.list_dishes()
             print('''0. <-- Go back
                     \r-----------------------------------''')
-            choice = input(f'\nChoose a dish to {action} (1-{self.num_dishes}, 0): ').strip()
+            choice = input(f'\nChoose a dish to {action} (1-{len(self.dishes)}, 0): ').strip()
             if choice == '0':
                 return 0
-            elif choice.isdigit() and int(choice) in range(1, self.num_dishes+1):
-                return self.__dishes[int(choice)-1]
+            elif choice.isdigit() and int(choice) in range(1, len(self.dishes)+1):
+                return self.dishes[int(choice)-1]
 
     def list_dishes(self):
-        # print(self.__dishes)
-        if self.num_dishes == 0:
+        # print(self.dishes)
+        if len(self.dishes) == 0:
             print('(!) No dish')
         else:
             print('   Name\t\t\t\tPrice (VND)')
-            for i, dish in enumerate(self.__dishes):
+            for i, dish in enumerate(self.dishes):
                 print(str(i+1) + '.', dish)
 
     def start(self):
         while True:
+            write_data('dishes', self.dishes, self.names)
             os.system('clear')
             print('\n----- Admin / Dishes Manager ------\n')
             self.list_dishes()
