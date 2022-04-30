@@ -1,3 +1,5 @@
+import os
+from input import *
 from domains.M_dish import Dish_Manager
 from domains.M_employee import *
 
@@ -6,15 +8,17 @@ e_manager = Employee_Manager()
 
 if __name__ == '__main__':
     while True:
+        os.system('clear')
         password = input('\nEnter password: ')
+        while password != 'admin' and password != 'staff':
+            os.system('clear')
+            print('(!) Wrong password')
+            password = input('Enter password: ')
         if password == 'admin':
             # Administrator section: food menu, employees, and bills
             while True:
-                print('''\n--------- Administrator ---------\n
-                        \r  1. Dishes
-                        \r  2. Employees
-                        \r  3. Bills
-                        \r  0. Quit''')
+                os.system('clear')
+                print_admin_action()
                 choice = input('\nChoice (1230): ')
                 if choice == '0':
                     break
@@ -24,18 +28,13 @@ if __name__ == '__main__':
                     e_manager.start()
                 elif choice == '3':
                     n = 3
-                else:
-                    print('(!) Bad choice')
 
         elif password == 'staff':
             # Staff section: ordering and billing
             while True:
+                os.system('clear')
                 print('''\n----- Tables -----\n
                         \r  đang làm''')
                 choice = input('\nẤn 0 để sủi: ')
                 if choice == '0':
                     break
-                else: 
-                    print(f'\'{choice}\' là cái đéo gì')
-        else:
-            print('(!) Wrong password')

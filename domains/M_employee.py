@@ -1,3 +1,4 @@
+import os
 from input import *
 from domains.Employee import Employee
 
@@ -18,9 +19,6 @@ class Employee_Manager:
         for i in self.__employees:
             print(i)
 
-    def __repr__(self):
-        return f'Employee_Manager({self.__employees})'
-
     def choose_role(self):
         role = input('''. Choose role:
                         \r      1. Manager    2. Chef     3. Waiter
@@ -39,7 +37,9 @@ class Employee_Manager:
         return self.shifts[shift]       # Convert from key (123) to its value
 
     def add_employee(self):
-        print('\nAdding an employee')
+        os.system('clear')
+        print('''\n---- Admin / Employee Manager -----\n
+                \rAdding an employee''')
         fst, lst = input_name()
         id = input('. Enter ID: ').strip()
         while id in self.ids:
@@ -54,8 +54,12 @@ class Employee_Manager:
 
     def edit_employee(self, employee):
         while True:
-            print(f'Editing employee \'{employee.get_name()}\'\n')
-            print('''Choose what to edit:
+            os.system('clear')
+            print('\n---- Admin / E_Manager / Edit -----\n')
+            print(f'''Name\t\t\t  ID\t\t  Address\t  Role\t\t      Salary  Shift
+                    \r{employee}\n
+                    \r-----------------------------------''')
+            print('''\nChoose what to edit:
                     \r  1. Name
                     \r  2. ID
                     \r  3. Address
@@ -85,35 +89,32 @@ class Employee_Manager:
             elif choice == '5':
                 shift = self.choose_shift()
                 employee.set_shift(shift)
-            else:
-                print('(!) Bad choice')
 
     def delete_employee(self, employee):
-        name = employee.get_name()
+        self.ids.remove(employee.get_id())
         self.__employees.remove(employee)
         self.num_employees -= 1
-        self.ids.remove(employee.get_id())
-        print(f'Employee \'{name}\' is removed')
 
-    def select_employee(self):
-        if self.num_employees == 0:
-            print('(!) No employees to modify')
-            return 0
+    def select_employee(self, action):
+        if self.num_employees == 0: return 0
         while True:
-            choice = input(f'Select an employee (1-{self.num_employees}, 0 = return): ').strip()
+            os.system('clear')
+            print('\n---- Admin / Employee Manager -----\n')
+            self.list_employees()
+            print('''0. <-- Go back
+                    \r-----------------------------------''')
+            choice = input(f'\nSelect an employee to {action} (1-{self.num_employees}, 0): ').strip()
             if choice == '0':
                 return 0
             elif choice.isdigit() and int(choice) in range(1, self.num_employees+1):
                 return self.__employees[int(choice)-1]
-            else:
-                print('(!) Bad choice')
 
     def list_employees(self):
         # print(self.__employees)
         if self.num_employees == 0:
-            print('(!) No employees\n')
+            print('(!) No employees')
         else:
-            print('   Name\t\t\t     ID\t\t     Address\tRole\t\t    Salary\tShift')
+            print('   Name\t\t\t     ID\t\t     Address\t     Role\t\t Salary  Shift')
             for i, employee in enumerate(self.__employees):
                 print(str(i+1) + '.', employee)
 
@@ -126,31 +127,31 @@ class Employee_Manager:
 
     def start(self):
         while True:
+            os.system('clear')
             print('\n---- Admin / Employee Manager -----\n')
             self.list_employees()
-            print('''-----------------------------------
-                    \rChoose an option:
+            print('''\n-----------------------------------
+                    \r\nChoose an option:
                     \r  1. Add
                     \r  2. Edit
                     \r  3. Delete
                     \r  0. <-- Go back''')
-            choice = input('Choice (1230): ').strip()
+            choice = input('\nChoice (1230): ').strip()
             if choice == '0':
+                os.system('clear')
                 return
             elif choice == '1':
                 self.add_employee()
             elif choice == '2':
-                employee = self.select_employee()
+                employee = self.select_employee('edit')
                 if employee == 0:
                     continue
                 self.edit_employee(employee)
             elif choice == '3':
-                employee = self.select_employee()
+                employee = self.select_employee('delete')
                 if employee == 0:
                     continue
                 self.delete_employee(employee)
-            else:
-                print('(!) Bad choice')
 
 if __name__ == '__main__':
     e_manager = Employee_Manager()
