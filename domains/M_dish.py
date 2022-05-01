@@ -4,14 +4,24 @@ from domains.Dish import Dish
 
 class Dish_Manager:
     names = []  # List of used names
-    num_dishes = 0
 
     def __init__(self):
-        self.dishes = []
+        self.__dishes = []
 
     def __str__(self):
-        for i in self.dishes:
+        for i in self.__dishes:
             print(i)
+
+    def refresh_name(self):
+        self.names = []
+        for i in self.__dishes:
+            self.names.append(i.get_name())
+
+    def get_dishes(self):   # Return a list of dishes(objects)
+        return self.__dishes
+
+    def load_dishes(self):
+        self.__dishes, self.names = read_data('dishes')
 
     def add_dish(self):
         os.system('clear')
@@ -31,19 +41,17 @@ class Dish_Manager:
             price = input('''(!) Invalid price
                             \rTry again: ''').strip()
         price = int(price)
-        self.dishes.append(Dish(name, price))
+        self.__dishes.append(Dish(name, price))
 
     def edit_dish(self, dish):
         while True:
             os.system('clear')
             print('\n---- Admin / D_Manager / Edit -----\n')
-            print(f'''Name\t\t\t     Price (VND)
-                    \r{dish}\n
-                    \r-----------------------------------''')
-            print('''\nChoose what to edit:
-                    \r  1. Name
-                    \r  2. Price
-                    \r  0. <- Go back''')
+            print(f'''   Name\t\t\t\tPrice (VND)
+                    \r-> {dish}\n
+                    \r-----------------------------------
+                    \r\n    1. Name     |    2. Price
+                    \r\n0. <- Back''')
             choice = input('\nChoice (120): ').strip()
             if choice == '0':
                 return
@@ -67,60 +75,63 @@ class Dish_Manager:
                 dish.set_price(price)
 
     def delete_dish(self, dish):
-        self.names.remove(dish.get_name())
-        self.dishes.remove(dish)
+        confirm = input(f'''\n'{dish.get_name()}' will be deleted
+                        \rType 'y' to confirm: ''').strip()
+        if confirm == 'y':
+            self.names.remove(dish.get_name())
+            self.__dishes.remove(dish)
+            return 1
+        else: return 0
 
-    def select_dish(self, action):
-        if len(self.dishes) == 0: return 0
+    def select_dish(self, dish):
         while True:
             os.system('clear')
-            print('\n----- Admin / Dishes Manager ------\n')
-            self.list_dishes()
-            print('''0. <-- Go back
-                    \r-----------------------------------''')
-            choice = input(f'\nChoose a dish to {action} (1-{len(self.dishes)}, 0): ').strip()
+            print(f'''\n----- Admin / Dishes Manager ------\n
+                    \r   Name\t\t\t\tPrice (VND)
+                    \r-> {dish}\n
+                    \r-----------------------------------
+                    \r\n    1. Edit     |    2. Delete
+                    \r\n0. <- Back''')
+            choice = input('\nChoice (120): ').strip()
             if choice == '0':
                 return 0
-            elif choice.isdigit() and int(choice) in range(1, len(self.dishes)+1):
-                return self.dishes[int(choice)-1]
+            elif choice == '1':
+                self.edit_dish(dish)
+            elif choice == '2':
+                d = self.delete_dish(dish)
+                if d == 1:
+                    return 0
 
     def list_dishes(self):
-        # print(self.dishes)
-        if len(self.dishes) == 0:
+        # print(self.__dishes)
+        if len(self.__dishes) == 0:
             print('(!) No dish')
         else:
             print('   Name\t\t\t\tPrice (VND)')
-            for i, dish in enumerate(self.dishes):
+            for i, dish in enumerate(self.__dishes):
                 print(str(i+1) + '.', dish)
 
     def start(self):
+        self.refresh_name()    # Solve the problem of the name conflict
         while True:
-            write_data('dishes', self.dishes, self.names)
+            write_data('dishes', self.__dishes, self.names)
             os.system('clear')
             print('\n----- Admin / Dishes Manager ------\n')
             self.list_dishes()
-            print('''\n-----------------------------------
-                    \r\nChoose an option:
-                    \r  1. Add
-                    \r  2. Edit
-                    \r  3. Delete
-                    \r  0. <-- Go back''')
-            choice = input('\nChoice (1230): ').strip()
+            print(f'''\n-----------------------------------
+                    \r\na.            | ADD |
+                    \r\n0. <- Back''')
+            if len(self.__dishes) == 0:
+                choice = input('\nChoice (a, 0): ').strip()
+            else:
+                choice = input(f'\nChoice (a, 1-{len(self.__dishes)}, 0): ').strip().lower()
             if choice == '0':
                 os.system('clear')
                 return
-            elif choice == '1':
+            elif choice == 'a':
                 self.add_dish()
-            elif choice == '2':
-                dish = self.select_dish('edit')
-                if dish == 0:
-                    continue
-                self.edit_dish(dish)
-            elif choice == '3':
-                dish = self.select_dish('delete')
-                if dish == 0:
-                    continue
-                self.delete_dish(dish)
+            elif len(self.__dishes) > 0 and choice.isdigit() and int(choice) in range(1, len(self.__dishes)+1):
+                self.select_dish(self.__dishes[int(choice)-1])
 
 if __name__ == '__main__':
     dish_manager = Dish_Manager()

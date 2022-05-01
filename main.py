@@ -17,8 +17,8 @@ if __name__ == '__main__':
     if os.path.exists('res_data.zip'):
         try:
             decompress_data()
-            d_manager.dishes, d_manager.names = read_data('dishes')
-            e_manager.employees, e_manager.ids = read_data('employees')
+            d_manager.load_dishes()
+            e_manager.load_employees()
             # o_manager = read_data('orders')
         except Exception as e:
             print(f'(!) Error: {e}')
@@ -60,7 +60,7 @@ if __name__ == '__main__':
                     table = table_list[int(choice) - 1]  # get the table object
                     if str(table) == '0':  # if table is empty, start ordering for this table
                         table.update()
-                        o_manager.add_order(int(choice), d_manager)    # add order with table number
+                        o_manager.add_order(int(choice), d_manager)    # add order with table id
 
                 elif choice == '0':
                     break

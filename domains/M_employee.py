@@ -12,11 +12,19 @@ class Employee_Manager:
     shifts = {'1': 'Morning', '2': 'Afternoon', '3': 'Evening'}
 
     def __init__(self):
-        self.employees = []
+        self.__employees = []
 
     def __str__(self):
-        for i in self.employees:
+        for i in self.__employees:
             print(i)
+
+    def refresh_ids(self):  # Used for debugging
+        self.ids = []
+        for employee in self.__employees:
+            self.ids.append(employee.get_id())
+
+    def load_employees(self):
+        self.__employees, self.ids = read_data('employees')
 
     def choose_role(self):
         role = input('''. Choose role:
@@ -48,7 +56,7 @@ class Employee_Manager:
         r = self.choose_role()
         salary = self.salaries[r]   # Get the salary of the role
         shift = self.choose_shift()
-        self.employees.append(Employee(fst, lst, id, adr, r, salary, shift))
+        self.__employees.append(Employee(fst, lst, id, adr, r, salary, shift))
 
     def edit_employee(self, employee):
         while True:
@@ -63,7 +71,7 @@ class Employee_Manager:
                     \r  3. Address
                     \r  4. Role
                     \r  5. Shift
-                    \r  0. <-- Go back''')
+                    \r  0. <- Go back''')
             choice = input('\nChoice (123450): ').strip()
             if choice == '0':
                 return
@@ -89,42 +97,46 @@ class Employee_Manager:
                 employee.set_shift(shift)
 
     def delete_employee(self, employee):
-        self.ids.remove(employee.get_id())
-        self.employees.remove(employee)
+        confirm = input(f'''\n'{employee.get_name()}' will be deleted
+                        \rType 'y' to confirm: ''').strip()
+        if confirm == 'y':
+            self.ids.remove(employee.get_id())
+            self.__employees.remove(employee)
 
     def select_employee(self, action):
-        if len(self.employees) == 0: return 0
+        if len(self.__employees) == 0: return 0
         while True:
             os.system('clear')
             print('\n---- Admin / Employee Manager -----\n')
             self.list_employees()
-            print('''0. <-- Go back
+            print('''0. <- Go back
                     \r-----------------------------------''')
-            choice = input(f'\nSelect an employee to {action} (1-{len(self.employees)}, 0): ').strip()
+            choice = input(f'\nSelect an employee to {action} (1-{len(self.__employees)}, 0): ').strip()
             if choice == '0':
                 return 0
-            elif choice.isdigit() and int(choice) in range(1, len(self.employees)+1):
-                return self.employees[int(choice)-1]
+            elif choice.isdigit() and int(choice) in range(1, len(self.__employees)+1):
+                return self.__employees[int(choice)-1]
 
     def list_employees(self):
-        # print(self.employees)
-        if len(self.employees) == 0:
-            print('(!) No employees')
+        # print(self.__employees)
+        if len(self.__employees) == 0:
+            print('(!) No employee')
         else:
             print('   Name\t\t\t     ID\t\t     Address\t     Role\t\t Salary  Shift')
-            for i, employee in enumerate(self.employees):
+            for i, employee in enumerate(self.__employees):
                 print(str(i+1) + '.', employee)
 
     def list_by_shift(self):
         shift = self.choose_shift()
         print()
-        for employee in self.employees:
+        for employee in self.__employees:
             if employee.get_shift() == shift:
                 print(employee)
 
     def start(self):
+        self.refresh_ids()  # Refresh the list of IDs
         while True:
-            write_data('employees', self.employees, self.ids)
+            write_data('employees', self.__employees, self.ids)
             os.system('clear')
             print('\n---- Admin / Employee Manager -----\n')
             self.list_employees()
@@ -133,7 +145,7 @@ class Employee_Manager:
                     \r  1. Add
                     \r  2. Edit
                     \r  3. Delete
-                    \r  0. <-- Go back''')
+                    \r  0. <- Go back''')
             choice = input('\nChoice (1230): ').strip()
             if choice == '0':
                 os.system('clear')
