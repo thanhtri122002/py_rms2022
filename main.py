@@ -7,6 +7,7 @@ from domains.M_employee import *
 d_manager = Dish_Manager()
 e_manager = Employee_Manager()
 o_manager = Order_Manager()
+b_manager = Bill_Manager()
 
 table_list = []  # list of tables
 for _ in range(0, 9):
@@ -48,11 +49,12 @@ if __name__ == '__main__':
                 elif choice == '2':
                     e_manager.start()
                 elif choice == '3':
-                    n = 3
+                    b_manager.start()
 
         elif password == 'staff':
             # Staff section: ordering and billing
             while True:
+                orders = o_manager.get_orders()
                 os.system('clear')
                 print_tables(table_list)
                 choice = input('\nChoice (1-9, 0): ').strip()
@@ -63,8 +65,11 @@ if __name__ == '__main__':
                         if o != 0:  # if order is added, update table status
                             table.update()
                     elif str(table) == '1':         # if table is occupied, choose to edit order or bill
-                        while True:
-                            pass
+                        for o in orders:
+                            if o.get_table_id() == int(choice):
+                                o = o_manager.update_order(o, d_manager, b_manager)
+                                if o == -1:             # if bill exported, update table status to empty
+                                    table.update()
 
                 elif choice == '0':
                     break

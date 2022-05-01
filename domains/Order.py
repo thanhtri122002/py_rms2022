@@ -1,12 +1,14 @@
-import datetime
-
 class Order:
-    def __init__(self, id, table_id, cart):
-        self.__id = id
+    def __init__(self, table_id, cart):
         self.__table_id = table_id
-        self.__date = datetime.date.today()
-        self.cart = cart  # list of {dish: quantity}
+        self.__cart = cart  # list of {dish_name: quantity}
 
-    def __str__(self):
-        return f'''Order ID:{self.__id:5} Date: {self.__date:12} Table: {self.__table_id:1}
-                    \r{self.cart}'''
+
+    def get_table_id(self):
+        return self.__table_id
+
+    def get_cart(self):
+        return self.__cart
+
+    def set_cart(self, cart):
+        self.__cart = cart
