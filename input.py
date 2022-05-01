@@ -1,7 +1,7 @@
 import pickle
 import zipfile
 
-def input_name():
+def input_name_employee():  # used for employee, do name validating
     while True:
         try:
             fst, lst = input('. Enter name (first, last): ').strip().split(',')
@@ -12,6 +12,17 @@ def input_name():
             print('(!) Invalid name')
             continue
         return fst.strip(), lst.strip()
+
+def input_name_dish(used_name):     # used for dish, name simp_checking
+    name = input('. Enter name: ').strip()
+    while name in used_name or name == '':
+        if name == '':
+            name = input('''(!) Invalid name
+                        \rTry again: ''').strip()
+        else:
+            name = input(f'''(!) There is a \'{name}\' already
+                        \r Try again: ''').strip()
+    return name
 
 def print_admin_action():
     print('''\n--------- Administrator ---------\n
@@ -25,7 +36,8 @@ def print_tables(t):
             \r   [1]: {t[0]}     [2]: {t[1]}     [3]: {t[2]}
             \r   [4]: {t[3]}     [5]: {t[4]}     [6]: {t[5]}
             \r   [7]: {t[6]}     [8]: {t[7]}     [9]: {t[8]}
-            \r\n----------------------------------''')
+            \r\n----------------------------------\n
+            \r0. <- Back''')
 
 def write_data(str, list0, list1):      # str: 'dishes', 'employees', 'bills'
     with open(f'{str}.txt', 'wb') as f:

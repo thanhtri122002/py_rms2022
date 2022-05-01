@@ -1,5 +1,4 @@
 import os
-from input import *
 from domains.Table import *
 from domains.M_order import *
 from domains.M_dish import *
@@ -27,10 +26,11 @@ if __name__ == '__main__':
         os.system('clear')
         password = input('\nEnter password: ')
         while password != 'admin' and password != 'staff':
-            if password == 'quit':
+            if password == 'quit':  # Type 'quit' to save data and exit
                 compress_data()
                 os.remove('dishes.txt')
                 os.remove('employees.txt')
+                print('Data saved.')
                 exit()
             os.system('clear')
             print('(!) Wrong password')
@@ -55,12 +55,16 @@ if __name__ == '__main__':
             while True:
                 os.system('clear')
                 print_tables(table_list)
-                choice = input('\nSelect a table (1-9, 0): ').strip()
-                if choice.isdigit() and int(choice) in range(1, 10):
-                    table = table_list[int(choice) - 1]  # get the table object
-                    if str(table) == '0':  # if table is empty, start ordering for this table
-                        table.update()
-                        o_manager.add_order(int(choice), d_manager)    # add order with table id
+                choice = input('\nChoice (1-9, 0): ').strip()
+                if choice.isdigit() and int(choice) in range(1, 10):    # select table
+                    table = table_list[int(choice) - 1]
+                    if str(table) == '0':           # if table is empty, start ordering for this table
+                        o = o_manager.add_order(int(choice), d_manager)
+                        if o != 0:  # if order is added, update table status
+                            table.update()
+                    elif str(table) == '1':         # if table is occupied, choose to edit order or bill
+                        while True:
+                            pass
 
                 elif choice == '0':
                     break

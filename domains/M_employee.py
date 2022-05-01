@@ -45,9 +45,9 @@ class Employee_Manager:
 
     def add_employee(self):
         os.system('clear')
-        print('''\n---- Admin / Employee Manager -----\n
+        print('''\n---------------------------------- Admin / Employee Manager ----------------------------------\n
                 \rAdding an employee''')
-        fst, lst = input_name()
+        fst, lst = input_name_employee()
         id = input('. Enter ID: ').strip()
         while id in self.ids:
             id = input('(!) This ID is already taken\n Try again: ').strip()
@@ -61,22 +61,18 @@ class Employee_Manager:
     def edit_employee(self, employee):
         while True:
             os.system('clear')
-            print('\n---- Admin / E_Manager / Edit -----\n')
-            print(f'''Name\t\t\t  ID\t\t  Address\t  Role\t\t      Salary  Shift
-                    \r{employee}\n
-                    \r-----------------------------------''')
-            print('''\nChoose what to edit:
-                    \r  1. Name
-                    \r  2. ID
-                    \r  3. Address
-                    \r  4. Role
-                    \r  5. Shift
-                    \r  0. <- Go back''')
+            print('\n---------------------------------- Admin / E_Manager / Edit ----------------------------------\n')
+            print(f'''   Name\t\t\t     ID\t\t     Address\t     Role\t\t Salary  Shift
+                    \r-> {employee}\n
+                    \r----------------------------------------------------------------------------------------------\n
+                    \r                      1. Name      |       2. ID       |       3. Address\n
+                    \r                                 4. Role      |       5. Shift
+                    \r\n0. <- Back''')
             choice = input('\nChoice (123450): ').strip()
             if choice == '0':
                 return
             elif choice == '1':
-                fst, lst = input_name()
+                fst, lst = input_name_employee()
                 employee.set_name(fst, lst)
             elif choice == '2':
                 self.ids.remove(employee.get_id())
@@ -97,25 +93,32 @@ class Employee_Manager:
                 employee.set_shift(shift)
 
     def delete_employee(self, employee):
-        confirm = input(f'''\n'{employee.get_name()}' will be deleted
+        confirm = input(f'''\n(!) '{employee.get_name()}' will be removed.
                         \rType 'y' to confirm: ''').strip()
         if confirm == 'y':
             self.ids.remove(employee.get_id())
             self.__employees.remove(employee)
+            return 1
+        else: return 0
 
-    def select_employee(self, action):
-        if len(self.__employees) == 0: return 0
+    def select_employee(self, employee):
         while True:
             os.system('clear')
-            print('\n---- Admin / Employee Manager -----\n')
-            self.list_employees()
-            print('''0. <- Go back
-                    \r-----------------------------------''')
-            choice = input(f'\nSelect an employee to {action} (1-{len(self.__employees)}, 0): ').strip()
+            print(f'''\n---------------------------------- Admin / Employee Manager ----------------------------------\n
+                    \r   Name\t\t\t     ID\t\t     Address\t     Role\t\t Salary  Shift
+                    \r-> {employee}\n
+                    \r----------------------------------------------------------------------------------------------\n
+                    \r                                1. Edit       |       2. Delete
+                    \r\n0. <- Back''')
+            choice = input('\nChoice (120): ').strip()
             if choice == '0':
                 return 0
-            elif choice.isdigit() and int(choice) in range(1, len(self.__employees)+1):
-                return self.__employees[int(choice)-1]
+            elif choice == '1':
+                self.edit_employee(employee)
+            elif choice == '2':
+                d = self.delete_employee(employee)
+                if d == 1:
+                    return 0
 
     def list_employees(self):
         # print(self.__employees)
@@ -138,30 +141,21 @@ class Employee_Manager:
         while True:
             write_data('employees', self.__employees, self.ids)
             os.system('clear')
-            print('\n---- Admin / Employee Manager -----\n')
+            print('\n---------------------------------- Admin / Employee Manager ----------------------------------\n')
             self.list_employees()
-            print('''\n-----------------------------------
-                    \r\nChoose an option:
-                    \r  1. Add
-                    \r  2. Edit
-                    \r  3. Delete
-                    \r  0. <- Go back''')
-            choice = input('\nChoice (1230): ').strip()
+            print(f'''\n----------------------------------------------------------------------------------------------
+                    \r\na.                                         | ADD |
+                    \r\n0. <- Back''')
+            if len(self.__employees) == 0:
+                choice = input('\nChoice (a, 0): ').strip().lower()
+            else:
+                choice = input(f'\nChoice (a, 1-{len(self.__employees)}, 0): ').strip().lower()
             if choice == '0':
-                os.system('clear')
                 return
-            elif choice == '1':
+            elif choice == 'a':
                 self.add_employee()
-            elif choice == '2':
-                employee = self.select_employee('edit')
-                if employee == 0:
-                    continue
-                self.edit_employee(employee)
-            elif choice == '3':
-                employee = self.select_employee('delete')
-                if employee == 0:
-                    continue
-                self.delete_employee(employee)
+            elif choice.isdigit() and int(choice) in range(1, len(self.__employees)+1):
+                self.select_employee(self.__employees[int(choice)-1])
 
 if __name__ == '__main__':
     e_manager = Employee_Manager()

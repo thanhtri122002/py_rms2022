@@ -27,14 +27,7 @@ class Dish_Manager:
         os.system('clear')
         print('''\n----- Admin / Dishes Manager ------\n
                 \rAdding a dish''')
-        name = input('. Enter name: ').strip()
-        while name in self.names or name == '':
-            if name == '':
-                name = input('''(!) Invalid name
-                            \rTry again: ''').strip()
-            else:
-                name = input(f'''(!) There is a \'{name}\' already
-                            \r Try again: ''').strip()
+        name = input_name_dish(self.names)
         self.names.append(name)
         price = input('. Enter price: ').strip()
         while not price.isdigit() or int(price) < 1:
@@ -46,21 +39,18 @@ class Dish_Manager:
     def edit_dish(self, dish):
         while True:
             os.system('clear')
-            print('\n---- Admin / D_Manager / Edit -----\n')
+            print('\n-------- Admin / D_Manager / Edit ---------\n')
             print(f'''   Name\t\t\t\tPrice (VND)
                     \r-> {dish}\n
-                    \r-----------------------------------
-                    \r\n    1. Name     |    2. Price
+                    \r-------------------------------------------\n
+                    \r       1. Name     |     2. Price
                     \r\n0. <- Back''')
             choice = input('\nChoice (120): ').strip()
             if choice == '0':
                 return
             elif choice == '1':
                 self.names.remove(dish.get_name())
-                name = input('. Enter name: ').strip()
-                while name in self.names:
-                    name = input('''(!) There is already a dish with this name
-                                    \r Try again: ''').strip()
+                name = input_name_dish(self.names)
                 dish.set_name(name)
                 self.names.append(name)
             elif choice == '2':
@@ -75,7 +65,7 @@ class Dish_Manager:
                 dish.set_price(price)
 
     def delete_dish(self, dish):
-        confirm = input(f'''\n'{dish.get_name()}' will be deleted
+        confirm = input(f'''\n(!) '{dish.get_name()}' will be removed.
                         \rType 'y' to confirm: ''').strip()
         if confirm == 'y':
             self.names.remove(dish.get_name())
@@ -86,11 +76,11 @@ class Dish_Manager:
     def select_dish(self, dish):
         while True:
             os.system('clear')
-            print(f'''\n----- Admin / Dishes Manager ------\n
+            print(f'''\n--------- Admin / Dishes Manager ----------\n
                     \r   Name\t\t\t\tPrice (VND)
                     \r-> {dish}\n
-                    \r-----------------------------------
-                    \r\n    1. Edit     |    2. Delete
+                    \r-------------------------------------------\n
+                    \r       1. Edit     |     2. Delete
                     \r\n0. <- Back''')
             choice = input('\nChoice (120): ').strip()
             if choice == '0':
@@ -116,21 +106,20 @@ class Dish_Manager:
         while True:
             write_data('dishes', self.__dishes, self.names)
             os.system('clear')
-            print('\n----- Admin / Dishes Manager ------\n')
+            print('\n--------- Admin / Dishes Manager ----------\n')
             self.list_dishes()
-            print(f'''\n-----------------------------------
-                    \r\na.            | ADD |
+            print(f'''\n-------------------------------------------
+                    \r\na.              | ADD |
                     \r\n0. <- Back''')
             if len(self.__dishes) == 0:
-                choice = input('\nChoice (a, 0): ').strip()
+                choice = input('\nChoice (a, 0): ').strip().lower()
             else:
                 choice = input(f'\nChoice (a, 1-{len(self.__dishes)}, 0): ').strip().lower()
             if choice == '0':
-                os.system('clear')
                 return
             elif choice == 'a':
                 self.add_dish()
-            elif len(self.__dishes) > 0 and choice.isdigit() and int(choice) in range(1, len(self.__dishes)+1):
+            elif choice.isdigit() and int(choice) in range(1, len(self.__dishes)+1):
                 self.select_dish(self.__dishes[int(choice)-1])
 
 if __name__ == '__main__':
