@@ -14,28 +14,30 @@ for _ in range(0, 9):
     table_list.append(Table())
 
 if __name__ == '__main__':
+    open(f'employees.txt', 'wb')        # to solve problem when program is closed without any employee added
     if os.path.exists('res_data.zip'):
         try:
             decompress_data()
             d_manager.load_dishes()
             e_manager.load_employees()
-            # o_manager = read_data('orders')
+            b_manager.load_bills()
         except Exception as e:
             print(f'(!) Error: {e}')
 
     while True:
         os.system('clear')
-        password = input('\nEnter password: ')
+        password = input('\nEnter password (type \'0\' to save and exit): ')
         while password != 'admin' and password != 'staff':
-            if password == 'quit':  # Type 'quit' to save data and exit
+            if password == '0':  # Type '0' to save data and exit
                 compress_data()
                 os.remove('dishes.txt')
                 os.remove('employees.txt')
+                os.remove('bills.txt')
                 print('Data saved.')
                 exit()
             os.system('clear')
             print('(!) Wrong password')
-            password = input('Enter password: ')
+            password = input('Enter password (type \'0\' to save and exit): ')
         if password == 'admin':
             # Administrator section: food menu, employees, and bills
             while True:
@@ -73,5 +75,3 @@ if __name__ == '__main__':
 
                 elif choice == '0':
                     break
-
-        

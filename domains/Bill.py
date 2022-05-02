@@ -1,12 +1,19 @@
 import datetime
 
+def total(cart, price_list):
+    total = 0
+    for i, dish in enumerate(cart):
+        total += price_list[i] * cart[dish]
+    return total
+
 class Bill:
-    def __init__(self, id, table_id, cart, total_price):
+    def __init__(self, id, table_id, cart, prices):
         self.__id = id
         self.__table_id = table_id
         self.__cart = cart
-        self.__total_price = 0
+        self.__prices = prices
         self.__date = datetime.datetime.now()
+        self.__total_price = total(cart, prices)
 
     def get_id(self):
         return self.__id
@@ -17,27 +24,22 @@ class Bill:
     def get_cart(self):
         return self.__cart
 
-    def get_total_price(self):
-        return self.__total_price
+    def get_prices(self):
+        return self.__prices
 
     def get_date(self):
         return self.__date
 
     def __str__(self):
-        return f'{self.__date: %d/%m/%Y}\t{self.__total_price}'
+        return f'{self.__id:4}\t\t{self.__date:%d/%m/%Y}\t\t{self.__total_price:10}'
 
-    def detail(self, dishes):
+    def details(self):
         bill = f'''\n----------------- Bill -----------------\n
-        \rTable: {self.__table_id}              ID: {self.__id}
-        \rTime: {self.__date: %d/%m/%Y %H:%M}\n'''
-        for d, q in self.__cart.items():
-            for dish in dishes:
-                if dish.get_name() == d:
-                    bill += f'{dish} x {q}\n'
+        \rTime: {self.__date:%H:%M:%S}         Date: {self.__date:%d/%m/%Y}
+        \rTable: {self.__table_id}\t\t  Bill ID: {self.__id:4}\n\n'''
+        for p, (d, q) in zip(self.__prices, self.__cart.items()):
+            bill += f' . {d:25} {p} x {q}\n'       # print the cart including name, price and quantity
 
-        bill += f'''\n*** Total: {self.__total_price} ***
+        bill += f'''\n\t*** Total: {self.__total_price} ***
                 \n----------------------------------------'''
-        return bill
-
-    def start(self):
-        pass
+        print(bill)

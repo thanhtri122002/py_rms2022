@@ -1,4 +1,5 @@
 import os
+from input import write_bill
 from domains.Order import Order
 from domains.M_bill import *
 
@@ -45,9 +46,9 @@ def order_modify(dish, cart, table_id):
                 os.system('clear')
                 print_menu(dish, table_id)
                 select_dish = input(f'''0. <- Back
-                                    \r\nChoice (1-{len(dish)}, 0): ''').strip()
+                                    \r\nAdd (1-{len(dish)}, 0): ''').strip()
                 if select_dish == '0': break
-                elif select_dish.isdigit() and int(select_dish) in range(1, len(dish)+1):   # select a dish on the menu
+                elif select_dish.isdigit() and int(select_dish) <= len(dish):   # select a dish on the menu
                     dish_name = dish[int(select_dish)-1].get_name()
                     if dish_name in cart:       # if the dish is already in the cart
                         cart[dish_name] += 1    # automatically increase the quantity
@@ -55,7 +56,7 @@ def order_modify(dish, cart, table_id):
                     else:
                         cart[dish_name] = 1     # add selected dish to the cart
                         break
-        elif choice.isdigit() and int(choice) in range(1, len(cart)+1):   # choose a dish from the cart
+        elif choice.isdigit() and int(choice) <= len(cart):   # choose a dish from the cart
             chosen_item = list(cart.keys())[int(choice)-1]  # get the dish(object) from the cart
             while True:
                 os.system('clear')
@@ -104,10 +105,16 @@ class Order_Manager:
             print('\nDo you want to export bill now?')
             confirm = input('Type \'y\' to confirm: ').strip().lower()
             if confirm == 'y':
+                os.system('clear')
                 num_bills = len(bill_manager.get_bills())   # used to generate the bill id
-                bill = Bill(num_bills, order.get_table_id(), cart, total_price(cart, dishes))
+                prices = []     # list of prices of the dishes in the cart
+                for dish in dishes:
+                    if dish.get_name() in cart:
+                        prices.append(dish.get_price())
+                bill = Bill(num_bills, order.get_table_id(), cart, prices)
                 bill_manager.add_bill(bill)
-                print(bill.detail(dishes))
+                bill.details()
+                write_bill(bill_manager.get_bills())
                 input('\nBill exported. Press Enter to continue...')
                 self.__orders.remove(order)
                 return -1

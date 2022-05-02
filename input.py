@@ -52,11 +52,28 @@ def read_data(str):
         list1 = pickle.load(f)
     return list0, list1
 
+def write_bill(bills):
+    # Save bills to a file
+    with open('bills.txt', 'wb') as f:
+        for bill in bills:
+            pickle.dump(bill, f)
+
+def read_bill():
+    # Read bills from a file
+    bills = []
+    with open('bills.txt', 'rb') as f:
+        while True:
+            try:
+                bills.append(pickle.load(f))
+            except EOFError:
+                break
+    return bills    
+
 def compress_data():
     with zipfile.ZipFile(f'res_data.zip', 'w') as f:
         f.write(f'dishes.txt')
         f.write(f'employees.txt')
-        # f.write(f'bills.txt')
+        f.write(f'bills.txt')
 
 def decompress_data():
     with zipfile.ZipFile(f'res_data.zip', 'r') as f:

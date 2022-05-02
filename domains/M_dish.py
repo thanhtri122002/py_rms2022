@@ -119,7 +119,7 @@ class Dish_Manager:
                 return
             elif choice == 'a':
                 self.add_dish()
-            elif choice.isdigit() and int(choice) in range(1, len(self.__dishes)+1):
+            elif choice.isdigit() and int(choice) <= len(self.__dishes):
                 self.select_dish(self.__dishes[int(choice)-1])
 
 if __name__ == '__main__':

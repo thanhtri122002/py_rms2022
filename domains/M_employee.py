@@ -154,7 +154,7 @@ class Employee_Manager:
                 return
             elif choice == 'a':
                 self.add_employee()
-            elif choice.isdigit() and int(choice) in range(1, len(self.__employees)+1):
+            elif choice.isdigit() and int(choice) <= len(self.__employees):
                 self.select_employee(self.__employees[int(choice)-1])
 
 if __name__ == '__main__':
