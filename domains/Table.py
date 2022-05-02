@@ -1,4 +1,3 @@
-from tkinter import N
 from input import *
 
 class Table:
@@ -13,7 +12,3 @@ class Table:
         if self.__status == 0:
             self.__status = 1
         else: self.__status = 0
-
-    def push_order(self, order):
-        self.__order = order
-        
