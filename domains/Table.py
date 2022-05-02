@@ -1,5 +1,3 @@
-from input import *
-
 class Table:
     def __init__(self):
         self.__status = 0

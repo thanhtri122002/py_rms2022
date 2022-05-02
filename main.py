@@ -15,6 +15,8 @@ for _ in range(0, 9):
 
 if __name__ == '__main__':
     open(f'employees.txt', 'wb')        # to solve problem when program is closed without any employee added
+    open(f'dishes.txt', 'wb')           # used when program is closed without any employee added    (rarely happens)
+    open(f'bills.txt', 'wb')            # used when program is closed without any bills added       (rarely happens)
     if os.path.exists('res_data.zip'):
         try:
             decompress_data()
